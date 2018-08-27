@@ -63,7 +63,7 @@ class ScoutLocalImgFeature(ImgFeatExtractor):
 
         cx, cy = self.center_pos(env)
         i, j = self.pos_2_2d_local(home[0], home[1], cx, cy)
-        print("home coordinate({}, {}), home={}".format(i, j))
+        print("home coordinate({}, {})".format(i, j))
         image[i, j, channel_num] += 1
         return channel_num + 1
 

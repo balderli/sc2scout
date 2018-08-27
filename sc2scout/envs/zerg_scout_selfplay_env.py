@@ -14,7 +14,17 @@ MAP_SIZE = {
     'Acolyte': (168, 200),
     'ScoutSimple64Dodge': (88, 96),
     'ScoutSimple64Dodge2': (88, 96),
-    'ScoutSimple64Dodge3': (88, 96)
+    'ScoutSimple64Dodge3': (88, 96),
+    'ScoutSimple64Zergling': (88, 96)
+}
+
+CAMERA_RANGE = {
+    'AbyssalReef': ([31, 8], [169, 136]),
+    'Simple64': ([19, 16], [69, 72]),
+    'ScoutSimple64Dodge': ([19, 16], [69, 72]),
+    'ScoutSimple64Dodge2': ([19, 16], [69, 72]),
+    'ScoutSimple64Dodge3': ([19, 16], [69, 72]),
+    'ScoutSimple64Zergling': ([19, 16], [69, 72]),
 }
 
 class ZergScoutSelfplayEnv(SC2SelfplayGymEnv):
@@ -28,6 +38,10 @@ class ZergScoutSelfplayEnv(SC2SelfplayGymEnv):
         self._map_size = None
         self._scout_survive = False
         self._init_map_size(kwargs['map_name'])
+
+        self._camera_range = CAMERA_RANGE[kwargs['map_name']]
+        self._screen_height_map = None
+        self._height_feature = None
 
     def _init_action_space(self):
         self.action_space = gym.spaces.Discrete(8)
@@ -47,6 +61,10 @@ class ZergScoutSelfplayEnv(SC2SelfplayGymEnv):
         self._init_scout_and_base(obs)
         for agent in self._agents:
             agent.reset(self)
+
+        self._screen_height_map = obs.observation.feature_screen['height_map']
+        self._height_feature = None
+
         print('*** ZergScoutEnv scout_unit=', self._scout.tag)
         print('*** ZergScoutEnv base_candidates=', self._base_candidates)
         return obs
@@ -88,6 +106,8 @@ class ZergScoutSelfplayEnv(SC2SelfplayGymEnv):
         if not find_scout and self._scout_survive:
             self._scout_survive = False
             print('***scout is killed***')
+
+        self._screen_height_map = obs.observation.feature_screen['height_map']
 
     def _init_scout_and_base(self, obs):
         units = obs.observation['units']
@@ -144,7 +164,7 @@ class ZergScoutSelfplayEnv(SC2SelfplayGymEnv):
                 tmp_minerals.append(u)
             elif self._check_vespene(u):
                 tmp_vespene.append(u)
-            elif u.int_attr.unit_type == UNIT_TYPEID.ZERG_OVERLORD.value:
+            elif u.int_attr.unit_type == UNIT_TYPEID.ZERG_ZERGLING.value:
                 if self._scout is None:
                     self._scout = u
                     self._scout_survive = True

@@ -47,3 +47,12 @@ class ScoutEvadeImgRwdWrapper(ScoutEvadeRwd):
                          sr.ViewEnemyReward(weight=20)]
 
 
+class ZerglingScoutEvadeImgRwdWrapper(ScoutEvadeRwd):
+    def __init__(self, env):
+        super(ZerglingScoutEvadeImgRwdWrapper, self).__init__(env)
+
+    def _assemble_reward(self):
+        self._rewards = [
+            ir.ZerglingEvadeImpactRwd(),
+            ir.ZerglingEvadeTargetDistanceRwd()
+        ]

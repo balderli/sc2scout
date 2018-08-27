@@ -24,7 +24,7 @@ class ZergBotAgent(AgentBase):
                 enemy = u
 
         if queen is None:
-            print('ZergBotAgent cannot find queue')
+            #print('ZergBotAgent cannot find queue')
             return [self._noop()]
 
         dist = sm.calculate_distance(queen.float_attr.pos_x, queen.float_attr.pos_y, 

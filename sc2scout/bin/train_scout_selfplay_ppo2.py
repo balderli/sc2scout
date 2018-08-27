@@ -132,7 +132,7 @@ def main(unused_argv):
 
     env = make_sc2_dis_env(num_env=param_concurrent, seed=rs, players=players, agent_interface_format=agent_interface_format)
 
-    ppo2.learn(policy=CnnPolicy, env=env, nsteps=128, nminibatches=1,
+    ppo2.learn(policy=CnnPolicy, env=env, nsteps=1000, nminibatches=1,
                lam=param_lam, gamma=param_gamma, noptepochs=4, log_interval=1,
                ent_coef=0.01,
                lr=lambda f: f * param_lr,

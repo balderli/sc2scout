@@ -22,9 +22,9 @@ class ImgFeatExtractor(FeatureExtractor):
     def pos_2_2d(self, pos_x, pos_y):
         if self._reverse:
             if pos_x > self._x_radius:
-                pos_x = self._x_radius - abs(x - self._x_radius)
+                pos_x = self._x_radius - abs(pos_x - self._x_radius)
             else:
-                pos_x = self._x_radius + abs(x - self._x_radius)
+                pos_x = self._x_radius + abs(pos_x - self._x_radius)
 
             if pos_y > self._y_radius:
                 pos_y = self._y_radius - abs(pos_y - self._y_radius)
