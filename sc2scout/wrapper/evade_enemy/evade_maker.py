@@ -1,9 +1,8 @@
 from sc2scout.wrapper.explore_enemy.zerg_scout_wrapper import ZergScoutWrapper
-from sc2scout.wrapper.evade_enemy.evade_act_wrapper import EvadeActWrapper, \
-    ZerglingEvadeActLocalWrapper, ZerglingEvadeActGlobalWrapper
-from sc2scout.wrapper.evade_enemy.evade_rwd_wrapper import ScoutEvadeRwdWrapper, ScoutEvadeImgRwdWrapper, ZerglingScoutEvadeImgRwdWrapper
+from sc2scout.wrapper.evade_enemy.evade_act_wrapper import EvadeActWrapper
+from sc2scout.wrapper.evade_enemy.evade_rwd_wrapper import ScoutEvadeRwdWrapper, ScoutEvadeImgRwdWrapper
 from sc2scout.wrapper.evade_enemy.evade_terminal_wrapper import EvadeTerminalWrapper, EvadeImgTerminalWrapper
-from sc2scout.wrapper.evade_enemy.evade_obs_wrapper import ScoutEvadeObsWrapper, ScoutEvadeImgObsWrapper, ZerglingScoutEvadeImgObsWrapper
+from sc2scout.wrapper.evade_enemy.evade_obs_wrapper import ScoutEvadeObsWrapper, ScoutEvadeImgObsWrapper
 from sc2scout.wrapper.wrapper_factory import WrapperMaker
 
 from baselines import deepq
@@ -45,41 +44,4 @@ class EvadeMakerV1(WrapperMaker):
             hiddens=[256, 128])
 
 
-class ZerglingEvadeMakerLocalV0(WrapperMaker):
-    def __init__(self):
-        super(ZerglingEvadeMakerLocalV0, self).__init__('evade_v1')
 
-    def make_wrapper(self, env):
-        if env is None:
-            raise Exception('input env is None')
-        env = ZerglingEvadeActLocalWrapper(env)
-        env = EvadeImgTerminalWrapper(env)
-        env = ScoutEvadeImgRwdWrapper(env)
-        env = ZerglingScoutEvadeImgObsWrapper(env, False)
-        env = ZergScoutWrapper(env)
-        return env
-
-    def model_wrapper(self):
-        return deepq.models.cnn_to_mlp(
-            convs=[(32, 8, 4), (64, 4, 2), (64, 3, 1)],
-            hiddens=[256, 128])
-
-
-class ZerglingEvadeMakerGlobalV0(WrapperMaker):
-    def __init__(self):
-        super(ZerglingEvadeMakerGlobalV0, self).__init__('evade_v1')
-
-    def make_wrapper(self, env):
-        if env is None:
-            raise Exception('input env is None')
-        env = ZerglingEvadeActGlobalWrapper(env)
-        env = EvadeImgTerminalWrapper(env)
-        env = ZerglingScoutEvadeImgRwdWrapper(env)
-        env = ZerglingScoutEvadeImgObsWrapper(env, True)
-        env = ZergScoutWrapper(env)
-        return env
-
-    def model_wrapper(self):
-        return deepq.models.cnn_to_mlp(
-            convs=[(32, 8, 4), (64, 4, 2), (64, 3, 1)],
-            hiddens=[256, 128])
