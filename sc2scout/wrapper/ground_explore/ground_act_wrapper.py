@@ -171,6 +171,6 @@ class ZerglingEvadeActGlobalWrapper(gym.ActionWrapper):
         im = im.resize((32, 32))
 
         self.unwrapped._height_feature = np.array(im)
-        #self.save_map(height_feature, 'height_feature.bmp')
+        self.save_map(self.unwrapped._height_feature, 'height_feature.bmp')
 
 
