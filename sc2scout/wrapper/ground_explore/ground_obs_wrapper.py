@@ -38,7 +38,7 @@ class ZerglingScoutEvadeImgObsWrapper(gym.ObservationWrapper):
 class GroundImgObsWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super(GroundImgObsWrapper, self).__init__(env)
-        self._global = GroundImgFeature("height_feature.bmp")
+        self._global = GroundImgFeature()
         self._vec = GroundVecFeature()
         self._init_obs_space()
         print("TargetObsWrapperV3: g_shape={};v_shape={};total_obs_shape={}".format(

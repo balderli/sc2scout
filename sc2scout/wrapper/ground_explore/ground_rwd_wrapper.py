@@ -34,4 +34,14 @@ class ZerglingScoutEvadeImgRwdWrapper(GroundExploreRwd):
             gr.ZerglingEvadeTargetDistanceRwd()
         ]
 
+class GroundRwdWrapper(GroundExploreRwd):
+    def __init__(self, env):
+        super(GroundRwdWrapper, self).__init__(env)
+
+    def _assemble_reward(self):
+        self._rewards = [
+            gr.GroundImpactRwd(),
+            gr.GroundDistanceRwd()
+        ]
+
 
