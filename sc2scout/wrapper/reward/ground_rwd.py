@@ -164,19 +164,35 @@ class GroundExploreTargetRwd(Reward):
 
 class GroundFinalRwd(Reward):
     def __init__(self, weight=100):
-        super(EvadeFinalRwd, self).__init__(weight)
+        super(GroundFinalRwd, self).__init__(weight)
         self._dest = None
 
     def reset(self, obs, env):
-        self._dest = DestRange(env.enemy_base(), dest_range=20)
+        self._dest = DestRange(env.unwrapped.enemy_base(), dest_range=20)
 
     def compute_rwd(self, obs, reward, done, env):
         if done:
             scout = env.unwrapped.scout()
-            if self._dest.in_range((scout.float_attr.pos_x, 
+            if self._dest.in_range((scout.float_attr.pos_x,
                                     scout.float_attr.pos_y)):
                 self.rwd = 1 * self.w
         else:
             self.rwd = 0
+
+class GroundRangeRwd(Reward):
+    def __init__(self, weight=1):
+        super(GroundRangeRwd, self).__init__(weight)
+        self._dest = None
+
+    def reset(self, obs, env):
+        self._dest = DestRange(env.enemy_base(), dest_range=25)
+
+    def compute_rwd(self, obs, reward, done, env):
+        scout = env.unwrapped.scout()
+        if self._dest.in_range((scout.float_attr.pos_x,
+                                scout.float_attr.pos_y)):
+            self.rwd = 0
+        else:
+            self.rwd = -1 * self.w
 
 

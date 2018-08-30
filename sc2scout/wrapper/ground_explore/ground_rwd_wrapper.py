@@ -50,8 +50,18 @@ class GroundRwdWrapperV1(GroundExploreRwd):
 
     def _assemble_reward(self):
         self._rewards = [
-            gr.GroundImpactRwd(),
+            gr.GroundFinalRwd(),
             gr.GroundExploreTargetRwd()
+        ]
+
+class GroundRwdWrapperV2(GroundExploreRwd):
+    def __init__(self, env):
+        super(GroundRwdWrapperV2, self).__init__(env)
+
+    def _assemble_reward(self):
+        self._rewards = [
+            gr.GroundFinalRwd(),
+            gr.GroundRangeRwd()
         ]
 
 

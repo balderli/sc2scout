@@ -1,2 +1,3 @@
 from sc2scout.wrapper.ground_explore.ground_maker import ZerglingEvadeMakerLocalV0, \
-ZerglingEvadeMakerGlobalV0, GroundMakerV2, GroundMakerV3, GroundMakerV4
+ZerglingEvadeMakerGlobalV0, GroundMakerV2, GroundMakerV3, GroundMakerV4, \
+GroundMakerV5
