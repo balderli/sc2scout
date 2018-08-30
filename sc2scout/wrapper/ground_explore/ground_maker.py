@@ -5,7 +5,7 @@ ZerglingEvadeActGlobalWrapper
 from sc2scout.wrapper.ground_explore.ground_obs_wrapper import ZerglingScoutEvadeImgObsWrapper, \
 GroundImgObsWrapper
 from sc2scout.wrapper.ground_explore.ground_rwd_wrapper import ZerglingScoutEvadeImgRwdWrapper, \
-GroundRwdWrapper
+GroundRwdWrapper, GroundRwdWrapperV1
 from sc2scout.wrapper.wrapper_factory import WrapperMaker
 
 class ZerglingEvadeMakerLocalV0(WrapperMaker):
@@ -67,6 +67,22 @@ class GroundMakerV3(WrapperMaker):
             raise Exception('input env is None')
         env = EvadeActWrapper(env)
         env = GroundRwdWrapper(env)
+        env = GroundImgObsWrapper(env)
+        env = ZergScoutWrapper(env)
+        return env
+
+    def model_wrapper(self):
+        return None
+
+class GroundMakerV4(WrapperMaker):
+    def __init__(self):
+        super(GroundMakerV4, self).__init__('ground_v4')
+
+    def make_wrapper(self, env):
+        if env is None:
+            raise Exception('input env is None')
+        env = EvadeActWrapper(env)
+        env = GroundRwdWrapperV1(env)
         env = GroundImgObsWrapper(env)
         env = ZergScoutWrapper(env)
         return env

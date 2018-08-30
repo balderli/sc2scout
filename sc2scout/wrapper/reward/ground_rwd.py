@@ -114,7 +114,7 @@ class GroundImpactRwd(Reward):
             return
 
         if distance < 0.1:
-            #print('GroundImpact negative reward')
+            print('GroundImpact negative reward')
             self.rwd = -1 * self.w
         else:
             self.rwd = 0
@@ -122,7 +122,61 @@ class GroundImpactRwd(Reward):
     def distance(self, pos1, pos2):
         x = pos1[0] - pos2[0]
         y = pos1[1] - pos2[1]
-
         return (x * x + y * y) ** 0.5
+
+
+class GroundExploreTargetRwd(Reward):
+    def __init__(self, weight=1):
+        super(GroundExploreTargetRwd, self).__init__(weight)
+
+    def reset(self, obs, env):
+        print("GroundExploreTargetRwd Reset")
+        scout = env.unwrapped.scout()
+        self._enemy = env.unwrapped.enemy_base()
+        curr_dist = self.distance((scout.float_attr.pos_x,
+                                   scout.float_attr.pos_y), self._enemy)
+        self._max_dist = 100.0
+        self._rwd_sum = 0.0
+        self._max_rwd_sum = 100.0
+        self._last_left_rwd = math.floor(int((curr_dist / self._max_dist) * self._max_rwd_sum))
+
+    def compute_rwd(self, obs, reward, done, env):
+        scout = env.unwrapped.scout()
+        curr_dist = self.distance((scout.float_attr.pos_x,
+                                   scout.float_attr.pos_y), self._enemy)
+        rwd = self._compute_rwd(curr_dist)
+        self.rwd = self.w * rwd
+        print('GroundExplore rwd; rwd={}, rwd_sum={}, curr_dist={}'.format(
+              self.rwd, self._rwd_sum, curr_dist))
+
+    def _compute_rwd(self, curr_dist):
+        left_rwd = math.floor(int((curr_dist / self._max_dist) * self._max_rwd_sum))
+        rwd = self._last_left_rwd - left_rwd
+        self._last_left_rwd = left_rwd
+        self._rwd_sum += rwd
+        return rwd
+
+    def distance(self, pos1, pos2):
+        x = pos1[0] - pos2[0]
+        y = pos1[1] - pos2[1]
+        return (x * x + y * y) ** 0.5
+
+
+class GroundFinalRwd(Reward):
+    def __init__(self, weight=100):
+        super(EvadeFinalRwd, self).__init__(weight)
+        self._dest = None
+
+    def reset(self, obs, env):
+        self._dest = DestRange(env.enemy_base(), dest_range=20)
+
+    def compute_rwd(self, obs, reward, done, env):
+        if done:
+            scout = env.unwrapped.scout()
+            if self._dest.in_range((scout.float_attr.pos_x, 
+                                    scout.float_attr.pos_y)):
+                self.rwd = 1 * self.w
+        else:
+            self.rwd = 0
 
 

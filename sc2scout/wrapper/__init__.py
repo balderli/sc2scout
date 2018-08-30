@@ -5,7 +5,7 @@ ExploreMakerV10, ExploreMakerV12
 from sc2scout.wrapper.evade_enemy import EvadeMakerV0, EvadeMakerV1
 from sc2scout.wrapper.explore_target import TargetMakerV1
 from sc2scout.wrapper.ground_explore import ZerglingEvadeMakerLocalV0, \
-ZerglingEvadeMakerGlobalV0, GroundMakerV2, GroundMakerV3
+ZerglingEvadeMakerGlobalV0, GroundMakerV2, GroundMakerV3, GroundMakerV4
 
 register('explore_v0', ExploreMakerV0())
 register('explore_v2', ExploreMakerV2())
@@ -21,4 +21,5 @@ register('ground_v0', ZerglingEvadeMakerLocalV0())
 register('ground_v1', ZerglingEvadeMakerGlobalV0())
 register('ground_v2', GroundMakerV2())
 register('ground_v3', GroundMakerV3())
+register('ground_v4', GroundMakerV4())
 

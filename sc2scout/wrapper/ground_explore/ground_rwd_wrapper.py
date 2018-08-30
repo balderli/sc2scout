@@ -44,4 +44,14 @@ class GroundRwdWrapper(GroundExploreRwd):
             gr.GroundDistanceRwd()
         ]
 
+class GroundRwdWrapperV1(GroundExploreRwd):
+    def __init__(self, env):
+        super(GroundRwdWrapperV1, self).__init__(env)
+
+    def _assemble_reward(self):
+        self._rewards = [
+            gr.GroundImpactRwd(),
+            gr.GroundExploreTargetRwd()
+        ]
+
 
