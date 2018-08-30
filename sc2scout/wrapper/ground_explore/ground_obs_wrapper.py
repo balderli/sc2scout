@@ -120,3 +120,31 @@ class GroundImgObsWrapperV1(gym.ObservationWrapper):
         print("obs space", self.observation_space)
 
 
+class GroundVecObsWrapper(gym.ObservationWrapper):
+    def __init__(self, env):
+        super(GroundVecObsWrapper, self).__init__(env)
+        self._vec = GroundVecFeatureV1()
+        self._init_obs_space()
+        print("GroundVecObsWrapper: v_shape={};total_obs_shape={}".format(
+              self._vec.obs_space().shape, self.observation_space.shape))
+
+    def _reset(self):
+        obs = self.env._reset()
+        self._vec.reset(self.env)
+        obs = self.observation(obs)
+        return obs
+
+    def _step(self, action):
+        obs, rwd, done, other = self.env._step(action)
+        obs = self.observation(obs)
+        return obs, rwd, done, other
+
+    def observation(self, obs):
+        return self._vec.extract(self.env, obs)
+
+    def _init_obs_space(self):
+        low =  np.zeros(self._vec.obs_space().shape)
+        high = np.ones(self._vec.obs_space().shape)
+        self.observation_space = Box(low, high)
+        print("obs space", self.observation_space)
+
