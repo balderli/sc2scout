@@ -124,7 +124,7 @@ class GroundMakerV6(WrapperMaker):
 
 class GroundMakerV7(WrapperMaker):
     def __init__(self):
-        super(GroundMakerV6, self).__init__('ground_v6')
+        super(GroundMakerV7, self).__init__('ground_v7')
 
     def make_wrapper(self, env):
         if env is None:

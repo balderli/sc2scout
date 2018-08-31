@@ -114,7 +114,7 @@ class GroundImpactRwd(Reward):
             return
 
         if distance < 0.1:
-            print('GroundImpact negative reward')
+            #print('GroundImpact negative reward')
             self.rwd = -1 * self.w
         else:
             self.rwd = 0
@@ -130,7 +130,6 @@ class GroundExploreTargetRwd(Reward):
         super(GroundExploreTargetRwd, self).__init__(weight)
 
     def reset(self, obs, env):
-        print("GroundExploreTargetRwd Reset")
         scout = env.unwrapped.scout()
         self._enemy = env.unwrapped.enemy_base()
         curr_dist = self.distance((scout.float_attr.pos_x,
@@ -146,8 +145,8 @@ class GroundExploreTargetRwd(Reward):
                                    scout.float_attr.pos_y), self._enemy)
         rwd = self._compute_rwd(curr_dist)
         self.rwd = self.w * rwd
-        print('GroundExplore rwd; rwd={}, rwd_sum={}, curr_dist={}'.format(
-              self.rwd, self._rwd_sum, curr_dist))
+        #print('GroundExplore rwd; rwd={}, rwd_sum={}, curr_dist={}'.format(
+        #      self.rwd, self._rwd_sum, curr_dist))
 
     def _compute_rwd(self, curr_dist):
         left_rwd = math.floor(int((curr_dist / self._max_dist) * self._max_rwd_sum))
