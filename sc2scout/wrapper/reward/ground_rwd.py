@@ -131,9 +131,9 @@ class GroundExploreTargetRwd(Reward):
 
     def reset(self, obs, env):
         scout = env.unwrapped.scout()
-        self._enemy = env.unwrapped.enemy_base()
+        self._start = (scout.float_attr.pos_x, scout.float_attr.pos_y)
         curr_dist = self.distance((scout.float_attr.pos_x,
-                                   scout.float_attr.pos_y), self._enemy)
+                                   scout.float_attr.pos_y), self._start)
         self._max_dist = 100.0
         self._rwd_sum = 0.0
         self._max_rwd_sum = 100.0
@@ -142,7 +142,7 @@ class GroundExploreTargetRwd(Reward):
     def compute_rwd(self, obs, reward, done, env):
         scout = env.unwrapped.scout()
         curr_dist = self.distance((scout.float_attr.pos_x,
-                                   scout.float_attr.pos_y), self._enemy)
+                                   scout.float_attr.pos_y), self._start)
         rwd = self._compute_rwd(curr_dist)
         self.rwd = self.w * rwd
         #print('GroundExplore rwd; rwd={}, rwd_sum={}, curr_dist={}'.format(
@@ -150,7 +150,7 @@ class GroundExploreTargetRwd(Reward):
 
     def _compute_rwd(self, curr_dist):
         left_rwd = math.floor(int((curr_dist / self._max_dist) * self._max_rwd_sum))
-        rwd = self._last_left_rwd - left_rwd
+        rwd = left_rwd - self._last_left_rwd
         self._last_left_rwd = left_rwd
         self._rwd_sum += rwd
         return rwd
